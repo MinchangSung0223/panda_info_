@@ -113,8 +113,8 @@ if __name__ == "__main__":
 	p.setAdditionalSearchPath(pybullet_data.getDataPath())
 	p.loadURDF("checkerboard/calibration.urdf", [0.5, 0, 0.01])
 	p.loadURDF("plane.urdf", [0, 0, 0.0])
-	d435Id = p.loadURDF("d435/d435.urdf", [0, 0, 0.0])
-	p.resetBasePositionAndOrientation(d435Id, [1, 0, 1],p.getQuaternionFromEuler([0,-math.pi/4,0]))
+
+
 	pandaId = p.loadURDF("Panda/panda.urdf", [0, 0, 0])
 	p.resetBasePositionAndOrientation(pandaId, [0, 0, 0], [0, 0, 0, 1])
 	kukaEndEffectorIndex = 6
@@ -126,8 +126,7 @@ if __name__ == "__main__":
 
 	while 1:
 		#print("joint state : ",joint_states)
-		d435pos, d435orn = p.getBasePositionAndOrientation(d435Id)
-		d435orn =  p.getEulerFromQuaternion(d435orn)
+		
 		for i in range(numJoints):
 			p.resetJointState(pandaId, i, joint_states[i])
 		
@@ -136,7 +135,7 @@ if __name__ == "__main__":
 		eef_pose = p.getLinkState(pandaId,9)
 		
 		
-		image =getCameraImageEEF(eef_pose) #getCameraImage(d435pos,d435orn)
+		image =getCameraImageEEF(eef_pose) 
 		eef_pose = p.getLinkState(pandaId,8)
 		Tbe = getMatrixfromEEf(eef_pose)
 		Tec = np.array([[0 ,-1 ,0, 0.1],[1 ,0 ,0, 0.0],[0 ,0 ,1, 0.0],[0,0,0,1]])
@@ -155,7 +154,7 @@ if __name__ == "__main__":
 		points = []
 		R = np.reshape(np.array(p.getMatrixFromQuaternion(p.getQuaternionFromEuler([0,0,math.pi])),dtype=np.float),(3,3))
 		#print(R)
-		T = np.array(d435pos,dtype=np.float)
+
 		#depth[:,0] = depth[:,0]-0.1;
 		for i in range(0,len(depth),8):
 		    x = (R[0,0]*(depth[i,0])*1000+R[0,1]*depth[i,1]*1000+R[0,2]*depth[i,2]*1000)
